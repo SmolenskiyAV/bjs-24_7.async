@@ -39,7 +39,7 @@ class AlarmClock {
             nowDate.toLocaleTimeString("ru-Ru", {// вывод строкового значения текущего времени в формате НН:ММ
                 hour: "2-digit",
                 minute: "2-digit",
-                })
+            })
         )
     }
 
@@ -48,22 +48,25 @@ class AlarmClock {
         function checkClock(time, callback) { //получение звонка функцией в качестве двух параметров
             
             if (time === this.getCurrentFormattedTime()) callback(); //если time совпадает с текущим временем, вызываем callback
-        
-            if (this.timerId === null) {
+        }  
+
+  
+        if (this.timerId === null) {
                 
-                this.timerId = setInterval( // Сохранение результата setInterval в свойство идентифиатора текущего таймера
+            this.timerId = setInterval( // Сохранение результата setInterval в свойство идентифиатора текущего таймера
                 
-                    function (){
-                        let checkClocK = checkClock.bind(start); //пытаемся привязать функцию checkClock к контексту метода .start() текущего объекта(принадлежащего классу AlarmClock) 
-                        for (const item of this.alarmCollection) {
-                        checkClocK(); // вызываем checkClock в контексте текущего объекта
-                        }
+                function (){
+                    checkClock = checkClock.bind(this);                             //привязываем функцию checkClock к контексту текущего объекта(принадлежащего классу AlarmClock) 
+                    for (const item of this.alarmCollection) {                      // перебираем все звонки alarmCollection
+                       let currentTime = alarmCollection[item].time;                // извлекаем из текущего(в рамках перебора всего массива) звонка параметр time
+                       let currentCallback = alarmCollection[item].callback;        // извлекаем из текущего(в рамках перебора всего массива) звонка функцию callback
+                       checkClock(currentTime, currentCallback);                    // вызываем checkClock в контексте текущего объекта с параметрами, взятыми из item-ного элемента массива
                     }
-                )
-            }
-         }  
-                
-    }
+                }
+            )
+        }
+    } 
+   
 
     stop() {
 
