@@ -1,5 +1,7 @@
 class AlarmClock {
 
+    savedThis = this; // сохраняем контекст класса, для использования его в методе .start ;)
+
     constructor() {
         
         this.alarmCollection = []; // коллекция звонков
@@ -56,10 +58,10 @@ class AlarmClock {
             this.timerId = setInterval( // Сохранение результата setInterval в свойство идентифиатора текущего таймера
                 
                 function (){
-                    checkClock = checkClock.bind(this);                             //привязываем функцию checkClock к контексту текущего объекта(принадлежащего классу AlarmClock) 
+                    checkClock = checkClock.bind(savedThis);                             //привязываем функцию checkClock к контексту текущего объекта(принадлежащего классу AlarmClock) 
                     for (const item of this.alarmCollection) {                      // перебираем все звонки alarmCollection
-                       let currentTime = alarmCollection[item].time;                // извлекаем из текущего(в рамках перебора всего массива) звонка параметр time
-                       let currentCallback = alarmCollection[item].callback;        // извлекаем из текущего(в рамках перебора всего массива) звонка функцию callback
+                       let currentTime = item.time;                // извлекаем из текущего(в рамках перебора всего массива) звонка параметр time
+                       let currentCallback = item.callback;        // извлекаем из текущего(в рамках перебора всего массива) звонка функцию callback
                        checkClock(currentTime, currentCallback);                    // вызываем checkClock в контексте текущего объекта с параметрами, взятыми из item-ного элемента массива
                     }
                 }
@@ -67,7 +69,6 @@ class AlarmClock {
         }
     } 
    
-
     stop() {
 
         if (this.timerId !== null) {
@@ -85,7 +86,7 @@ class AlarmClock {
 
     clearAlarms() {
         this.stop();
-        this.alarmCollection.splice(0, (this.alarmCollection.length - 1)); // очистка коллекции звонков от 0-го до последнего элемента
+        this.alarmCollection = [] ; // очистка коллекции звонков
     }
 
 }
