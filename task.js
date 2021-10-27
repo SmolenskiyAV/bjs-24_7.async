@@ -1,12 +1,12 @@
 class AlarmClock {
 
-    savedThis = this; // сохраняем контекст класса, для использования его в методе .start ;)
+    
 
     constructor() {
         
         this.alarmCollection = []; // коллекция звонков
         this.timerId = null; // свойство для хранения id без начального состояния
-
+        
     }
 
     addClock(time, callback, id) {
@@ -46,7 +46,9 @@ class AlarmClock {
     }
 
     start() {
-        
+    
+        checkClock = checkClock.bind(this);
+
         function checkClock(time, callback) { //получение звонка функцией в качестве двух параметров
             
             if (time === this.getCurrentFormattedTime()) callback(); //если time совпадает с текущим временем, вызываем callback
@@ -54,11 +56,13 @@ class AlarmClock {
 
   
         if (this.timerId === null) {
-                
+
+            
+
             this.timerId = setInterval( // Сохранение результата setInterval в свойство идентифиатора текущего таймера
-                
-                function (){
-                    checkClock = checkClock.bind(savedThis);                             //привязываем функцию checkClock к контексту текущего объекта(принадлежащего классу AlarmClock) 
+            
+                () => {
+                    
                     for (const item of this.alarmCollection) {                      // перебираем все звонки alarmCollection
                        let currentTime = item.time;                // извлекаем из текущего(в рамках перебора всего массива) звонка параметр time
                        let currentCallback = item.callback;        // извлекаем из текущего(в рамках перебора всего массива) звонка функцию callback
